@@ -9,12 +9,14 @@ RUN apt-get update -qqy \
        wget ca-certificates apt-transport-https \
        ttf-wqy-zenhei ttf-unfonts-core \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
-
-RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
-  && echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list \
+  
+RUN mkdir -p /usr/share/man/man1 \
+  && echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list.d/jessie-backports.list \
   && apt-get update -qqy \
-  && apt-get -qqy install google-chrome-unstable \
-  && rm /etc/apt/sources.list.d/google-chrome.list \
+  && apt-get -qqy --no-install-recommends install \
+    -t jessie-backports openjdk-8-jre-headless \
+    unzip \
+    wget \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 RUN useradd headless --shell /bin/bash --create-home \
